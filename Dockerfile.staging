@@ -16,6 +16,6 @@ WORKDIR /usr/src/app
 EXPOSE {|APP_PORT|}
 
 # different settings from local dev
-ENV DJANGO_SETTINGS_MODULE={|DJANGO_PROJECT_NAME|}.settings.staging
+ENV DJANGO_SETTINGS_MODULE=core.settings.staging
 
-CMD [ "gunicorn", "{|DJANGO_PROJECT_NAME|}.wsgi", "-b", "0.0.0.0:{|APP_PORT|}" ]
+CMD [ "gunicorn", "core.wsgi", "-b", "0.0.0.0:{|APP_PORT|}" ]

@@ -5,7 +5,7 @@ init:
 	pip install -r requirements.txt
 
 create_user_db:
-	docker exec --user postgres {|DOCKER_CONTAINER_PREFIX|}_db /bin/sh -c "createuser {|DB_NAME|} -s && createdb -U {|DB_NAME|} {|DB_NAME|}"
+	docker exec --user postgres {|DOCKER_CONTAINER_PREFIX|}_db /bin/sh -c "psql -tc \"SELECT 1 FROM pg_user WHERE usename = '{|DB_NAME|}'\" | grep -q 1 || (createuser {|DB_NAME|} -s && createdb -U {|DB_NAME|} {|DB_NAME|})"
 
 create_cache_table:
 	docker exec {|DOCKER_CONTAINER_PREFIX|}_web /bin/sh -c "python manage.py createcachetable" 
