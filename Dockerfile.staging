@@ -1,0 +1,21 @@
+FROM python:3.7.10-stretch
+
+# Update with new repo
+RUN apt-get update
+
+# Install software
+RUN apt-get install -y git
+
+RUN python -m pip install pip==21.0.1
+
+COPY requirements.txt ./requirements.txt
+RUN pip install -r /requirements.txt
+
+WORKDIR /usr/src/app
+
+EXPOSE {|APP_PORT|}
+
+# different settings from local dev
+ENV DJANGO_SETTINGS_MODULE={|DJANGO_PROJECT_NAME|}.settings.staging
+
+CMD [ "gunicorn", "{|DJANGO_PROJECT_NAME|}.wsgi", "-b", "0.0.0.0:{|APP_PORT|}" ]

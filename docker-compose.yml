@@ -1,0 +1,56 @@
+---
+version: '3'
+
+services:
+
+  {|DOCKER_CONTAINER_PREFIX|}_nginx:
+    container_name: {|DOCKER_CONTAINER_PREFIX|}_nginx
+    restart: always
+    image: nginx
+    depends_on:
+      - {|DOCKER_CONTAINER_PREFIX|}_web
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./staticfiles:/var/www/html/staticfiles
+    ports:
+      - '{|APP_PORT|}:80'
+    networks:
+      - traefik
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.backend={|DOCKER_CONTAINER_PREFIX|}_nginx'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:{|DOCKER_CONTAINER_PREFIX|}.com,www.{|DOCKER_CONTAINER_PREFIX|}.com'
+      - 'traefik.docker.network=traefik'
+
+  {|DOCKER_CONTAINER_PREFIX|}_web:
+    container_name: {|DOCKER_CONTAINER_PREFIX|}_web
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile.staging
+    depends_on:
+      - {|DOCKER_CONTAINER_PREFIX|}_db
+    links:
+      - {|DOCKER_CONTAINER_PREFIX|}_db:database
+    environment:
+      - PYTHONUNBUFFERED=0
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      - traefik
+
+  {|DOCKER_CONTAINER_PREFIX|}_db:
+    container_name: {|DOCKER_CONTAINER_PREFIX|}_db
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external:
+      name: proxy
+...

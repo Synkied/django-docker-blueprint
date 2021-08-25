@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+  <div class="card-body">
+    <form action="." method="post">
+      {% if form.non_field_errors %}
+        <div class="non-field-errors">
+          {% for err in form.non_field_errors %}
+            <p class="text-danger">{{ err }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% csrf_token %}
+      <div class="row">
+        {% for field in form %}
+          {% if field.name == 'location' %}
+            <div class="col-12 mt-3">
+              <strong>{% translate 'Filter resources' %}</strong>
+            </div>
+            <div class="col-6 mb-3">
+              {{ field.errors }}
+              {{ field.label_tag }} {{ field }}
+              {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+              {% endif %}
+            </div>
+          {% elif field.name == 'resource_type' %}
+            <div class="col-6 mb-4">
+              {{ field.errors }}
+              {{ field.label_tag }} {{ field }}
+              {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+              {% endif %}
+            </div>
+          {% else %}
+          <div class="col-12">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+              <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary">{% translate 'Submit' %}</button>
+    </form>
+  </div>
+{% endblock content %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{% static 'js/filter_resources.js' %}"></script>
+{% endblock javascript %}

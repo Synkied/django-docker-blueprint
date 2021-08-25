@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Register" %}{% endblock title %}
+
+{% block breadcrumbs %}
+  <li class="breadcrumb-item active" aria-current="page">
+    {% trans "Register" %}
+  </li>
+{% endblock breadcrumbs %}
+
+{% block header-connect %}{% endblock header-connect %}
+
+{% block content %}
+  <div class="card-body">
+
+    <h5>{% translate 'Sign up' %}</h5>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <p>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </p>
+      {% endfor %}
+      <button class="btn btn-primary" type="submit">{% translate 'Sign up' %}</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block favorites %}
+{% endblock favorites %}

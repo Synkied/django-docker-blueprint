@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+  <li class="breadcrumb-item" >
+    <a href="{% url 'resource_list' %}">{% trans "Resources" %}</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">{{ resource.label }}</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+    {% include 'resources/includes/resource_card.html' %}
+    <hr class="my-4">
+
+    <div class="card-body">
+      <h5 class="card-subtitle mb-2 text-muted">
+        <p>
+          <i class="bi bi-calendar-check"></i>
+          {% translate 'Reservations' %}
+        </p>
+      </h5>
+      <div class="row">
+        {% for reservation in resource.all_reservations %}
+        <div class="col-4">
+          {% include 'reservations/includes/reservation_card.html' %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+{% endblock content %}

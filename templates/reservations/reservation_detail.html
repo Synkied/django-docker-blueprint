@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+  <li class="breadcrumb-item" >
+    <a href="{% url 'reservation_list' %}">{% trans "Reservations" %}</a>
+  </li>
+  <li class="breadcrumb-item active" aria-current="page">{{ reservation.title }}</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+{% include 'reservations/includes/reservation_card.html' %}
+
+{% endblock content %}
